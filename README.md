@@ -1,8 +1,12 @@
 # jwt-demo
 This is example JWT with Spring Secuirty 
 
+based on YouTube Video: https://www.youtube.com/watch?v=KYNR5js2cXE
 
--openssl from Git Bash
+additional Resourse for Custom Database User Validation
+
+
+* Openssl is needed, can use from Git Bash install *
 add to path:
 C:\Program Files\Git\usr\bin
 
