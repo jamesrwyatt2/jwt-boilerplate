@@ -29,11 +29,13 @@ public class AuthController {
     @PostMapping("/user/token")
     public String token(@RequestBody AuthRequest request) {
         String token = userAuthService.login(request.username(), request.password());
+
         return token;
     }
 
     @PostMapping("/user/register")
     public String newUser(@RequestBody User user) {
+        /* ToDo: Add Roles to the user object */
         return userService.createUser(user);
     }
 

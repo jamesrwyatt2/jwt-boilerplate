@@ -3,6 +3,9 @@ This is example JWT with Spring Secuirty
 
 based on YouTube Video: https://www.youtube.com/watch?v=KYNR5js2cXE
 
+Auth UserService Layout:
+https://github.com/Yoh0xFF/java-spring-security-example
+
 additional Resourse for Custom Database User Validation
 
 

@@ -14,8 +14,11 @@ public class User {
     private String username;
     private String password;
 
+    /* ToDo: add roles */
+
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
+
 
     private boolean enabled = true;
 
