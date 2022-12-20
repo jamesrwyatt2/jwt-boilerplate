@@ -2,14 +2,11 @@ package com.jwctech.jwtdemo.Service.impl;
 
 import com.jwctech.jwtdemo.Service.UserAuthenticationService;
 import com.jwctech.jwtdemo.Service.UserService;
-import com.jwctech.jwtdemo.Service.token.TokenService;
 import com.jwctech.jwtdemo.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserAuthenticationServiceImpl implements UserAuthenticationService {
@@ -17,9 +14,9 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
     private static final Logger LOG = LoggerFactory.getLogger(UserAuthenticationServiceImpl.class);
 
     private final UserService userService;
-    private final TokenService tokenService;
+    private final TokenServiceImpl tokenService;
 
-    public UserAuthenticationServiceImpl(UserService userService, TokenService tokenService) {
+    public UserAuthenticationServiceImpl(UserService userService, TokenServiceImpl tokenService) {
         this.userService = userService;
         this.tokenService = tokenService;
 
@@ -39,18 +36,26 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
     }
 
     @Override
-    public Optional<User> findByToken(String token) {
-        return Optional.empty();
-    }
+    public User findByToken(String token) {
 
+        String username = tokenService.parseToken(token);
+        User user = userService.loadUserByUsername(username);
+        if (user == null) {
+            LOG.error("Invalid username or password");
+            throw new BadCredentialsException("Invalid username or password");
+        }
+
+        return user;
+    }
+    /** TODO: add logout and invalidate logic*/
     @Override
     public void logout(User user) {
 
     }
-
-//    @Override
-//    public String refresh(String username) {
-//        return jwtTokenProvider.createToken(username, userService.getUserByUsername(username).getRoles());
-//    }
+    /** TODO: add refresh token logic*/
+    @Override
+    public String refresh(String username) {
+        return tokenService.refreshToken(username);
+    }
 }
 

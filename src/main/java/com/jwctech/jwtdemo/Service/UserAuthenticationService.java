@@ -20,7 +20,7 @@ public interface UserAuthenticationService {
      * @param token user dao key
      * @return
      */
-    Optional<User> findByToken(String token);
+    User findByToken(String token);
 
     /**
      * Logs out the given input {@code user}.
@@ -28,4 +28,11 @@ public interface UserAuthenticationService {
      * @param user the user to logout
      */
     void logout(User user);
+
+    /**
+     * Refreshes the given input {@code token}.
+     *
+     * @param token the token to refresh
+     */
+    String refresh(String token);
 }

@@ -1,9 +1,10 @@
-package com.jwctech.jwtdemo.Service.token;
+package com.jwctech.jwtdemo.Service.impl;
 
+import com.jwctech.jwtdemo.Service.TokenService;
 import com.jwctech.jwtdemo.entity.Role;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class TokenService {
+public class TokenServiceImpl implements TokenService {
 
         private final JwtEncoder encoder;
 
-        public TokenService( JwtEncoder encoder) {
+        private final JwtDecoder decoder;
+
+        public TokenServiceImpl(JwtEncoder encoder, JwtDecoder decoder) {
             this.encoder = encoder;
+            this.decoder = decoder;
         }
 
         public String generateToken(String username, Set<Role> roles) {
@@ -36,4 +40,20 @@ public class TokenService {
                     .build();
             return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
         }
+
+        public String parseToken(String token) {
+            String username = decoder.decode(token).getSubject();
+
+            return username;
+        }
+
+    @Override
+    public boolean validateToken(String token) {
+        return false;
+    }
+
+    @Override
+    public String refreshToken(String token) {
+        return null;
+    }
 }

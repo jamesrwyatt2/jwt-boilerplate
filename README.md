@@ -1,12 +1,15 @@
 # jwt-demo
-This is example JWT with Spring Secuirty 
+This is example JWT with Spring Security 
 
 based on YouTube Video: https://www.youtube.com/watch?v=KYNR5js2cXE
 
 Auth UserService Layout:
 https://github.com/Yoh0xFF/java-spring-security-example
 
-additional Resourse for Custom Database User Validation
+blacklist JWT:
+https://github.com/GaetanoPiazzolla/blacklisting-jwt
+
+additional Resource for Custom Database User Validation
 
 
 * Openssl is needed, can use from Git Bash install *

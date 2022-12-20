@@ -54,8 +54,11 @@ public class SecurityConfig {
         return http
                 // Disable CSRF (cross site request forgery)
                 .csrf(csrf -> csrf.disable())
+                /** TODO: add Expired JWT filter */
+                //.addFilterBefore()
+
                 .authorizeRequests(auth -> auth
-                        //Allow all request for home page
+                        //Allow all request for home page with permit ALl
                         .antMatchers("/user/**").permitAll()
                         //AnyRequest is a catch-all for any request that doesn't match the above
                         .anyRequest().authenticated()
