@@ -10,6 +10,9 @@ https://github.com/Yoh0xFF/java-spring-security-example
 blacklist JWT:
 https://github.com/GaetanoPiazzolla/blacklisting-jwt
 
+Additional JWT Role Resources:
+https://medium.com/@akhileshanand/spring-boot-api-security-with-jwt-and-role-based-authorization-fea1fd7c9e32
+
 additional Resource for Custom Database User Validation
 
 
