@@ -21,9 +21,10 @@ public class UserServiceImpl implements UserService {
     public String createUser(User user) {
         /**TODO: Password Encoder */
 //        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        System.out.println("Get Reg Role" + user.getRoles());
+        user.setEnabled(true);
         User newUser = userRepository.save(user);
-        System.out.println("User created: " + newUser.getRoles());
+        System.out.println(newUser.toString());
+
         return "User Created";
     }
 

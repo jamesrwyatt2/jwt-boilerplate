@@ -25,9 +25,9 @@ public interface UserAuthenticationService {
     /**
      * Logs out the given input {@code user}.
      *
-     * @param user the user to logout
+     * @param token the token is invalidated to logout
      */
-    void logout(User user);
+    void logout(String token);
 
     /**
      * Refreshes the given input {@code token}.

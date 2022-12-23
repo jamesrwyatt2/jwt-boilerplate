@@ -2,14 +2,14 @@ package com.jwctech.jwtdemo.controller;
 
 import com.jwctech.jwtdemo.Service.UserAuthenticationService;
 import com.jwctech.jwtdemo.Service.UserService;
-import com.jwctech.jwtdemo.Service.impl.TokenServiceImpl;
-import com.jwctech.jwtdemo.entity.AuthRequest;
+import com.jwctech.jwtdemo.dto.AuthRequest;
 import com.jwctech.jwtdemo.entity.Role;
 import com.jwctech.jwtdemo.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashSet;
@@ -51,10 +51,11 @@ public class AuthController {
     }
     /**
      * Current Logout will invalidate the token at front end
-     * TODO: add logout logic to store invalidated JWT and add security filter to check if invalid */
+     * */
     @PostMapping("/user/logout")
-    public String logout(@RequestBody User user) {
-        //userAuthService.logout(user);
+    public String logout(@RequestHeader(name="Authorization") String token) {
+        String[] tokenSplit = token.split(" ");
+        userAuthService.logout(tokenSplit[1]);
         return "User logged out";
     }
     /** Not in use

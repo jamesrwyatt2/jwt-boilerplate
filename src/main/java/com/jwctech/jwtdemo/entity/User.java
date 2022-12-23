@@ -3,6 +3,7 @@ package com.jwctech.jwtdemo.entity;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -25,10 +26,9 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        this.enabled = true;
         this.roles = new HashSet<>();
     }
-
-
 
     public User() {
 
@@ -64,6 +64,25 @@ public class User {
 
     public void setRoles(Set<Role> authorities) {
         this.roles = authorities;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+    @Override
+    public String toString(){
+
+        String roleString = this.roles.stream()
+                .map(n -> String.valueOf(n.getAuthority()))
+                .collect(Collectors.joining("-"));
+
+        return "username: " + this.username +
+                ", enabled: " + this.enabled +
+                ", roles: " + roleString;
     }
 }
 

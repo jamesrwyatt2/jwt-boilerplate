@@ -1,5 +1,6 @@
 package com.jwctech.jwtdemo.Service.impl;
 
+import com.jwctech.jwtdemo.util.TokenProviderUtil;
 import com.jwctech.jwtdemo.Service.UserAuthenticationService;
 import com.jwctech.jwtdemo.Service.UserService;
 import com.jwctech.jwtdemo.entity.User;
@@ -14,11 +15,11 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
     private static final Logger LOG = LoggerFactory.getLogger(UserAuthenticationServiceImpl.class);
 
     private final UserService userService;
-    private final TokenServiceImpl tokenService;
+    private final TokenProviderUtil tokenProviderUtil;
 
-    public UserAuthenticationServiceImpl(UserService userService, TokenServiceImpl tokenService) {
+    public UserAuthenticationServiceImpl(UserService userService, TokenProviderUtil tokenProviderUtil) {
         this.userService = userService;
-        this.tokenService = tokenService;
+        this.tokenProviderUtil = tokenProviderUtil;
 
     }
 
@@ -32,13 +33,13 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
             throw new BadCredentialsException("Invalid username or password");
         }
 
-        return tokenService.generateToken(username, user.getRoles());
+        return tokenProviderUtil.generateToken(username, user.getRoles());
     }
 
     @Override
     public User findByToken(String token) {
 
-        String username = tokenService.parseToken(token);
+        String username = tokenProviderUtil.parseToken(token);
         User user = userService.loadUserByUsername(username);
         if (user == null) {
             LOG.error("Invalid username or password");
@@ -47,15 +48,15 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
         return user;
     }
-    /** TODO: add logout and invalidate logic*/
     @Override
-    public void logout(User user) {
-
+    public void logout(String token) {
+        tokenProviderUtil.revokeToken(token);
     }
+
     /** TODO: add refresh token logic*/
     @Override
     public String refresh(String username) {
-        return tokenService.refreshToken(username);
+        return tokenProviderUtil.refreshToken(username);
     }
 }
 
