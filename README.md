@@ -12,6 +12,8 @@ https://github.com/GaetanoPiazzolla/blacklisting-jwt
 
 Solution to Roles: https://dev.to/toojannarong/spring-security-with-jwt-the-easiest-way-2i43
 
+Info on filtering: https://medium.com/@akhileshanand/spring-boot-api-security-with-jwt-and-role-based-authorization-fea1fd7c9e32
+
 ***************** OLD references ***********
 
 
