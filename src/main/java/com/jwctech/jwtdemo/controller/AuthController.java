@@ -7,11 +7,11 @@ import com.jwctech.jwtdemo.entity.Role;
 import com.jwctech.jwtdemo.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,8 +29,20 @@ public class AuthController {
     }
 
     @PostMapping("/user/token")
-    public String token(@RequestBody AuthRequest request) {
+    public String token(@RequestBody AuthRequest request, HttpServletResponse response) {
+
         String token = userAuthService.login(request.username(), request.password());
+
+        Cookie cookie = new Cookie("RefreshToken", "test_refresh_token");
+        cookie.setMaxAge(30 * 24 * 60 * 60);
+        // Uncomment the following line to set the cookie to be used only in HTTPS
+//        cookie.setHttpOnly(true);
+//        cookie.setSecure(true);
+        cookie.setDomain("localhost");
+        cookie.setPath("/user/refresh");
+
+        response.addCookie(cookie);
+
         return token;
     }
 
@@ -61,7 +73,26 @@ public class AuthController {
     /** Not in use
      * TODO: add proper logic to  refresh*/
     @PostMapping("/user/refresh")
-    public String refresh(@RequestBody User user) {
+    public String refresh(@RequestHeader(name="Authorization") String token,
+//                          @CookieValue(name="RefreshToken") String refreshToken,
+                          HttpServletRequest request
+                            ) {
+
+        Cookie[] cookies = request.getCookies();
+
+//        LOG.warn("Cookies: {}", cookies);
+
+        if(cookies != null) {
+            for(Cookie cookie : cookies) {
+                LOG.warn("Cookie: {}", cookie.getName());
+                if(cookie.getName().equals("RefreshToken")) {
+                    LOG.warn("Cookie: " + cookie.getName() + " Value: " + cookie.getValue());
+                }
+            }
+        }
+
+//        System.out.println("Refresh token: " + refreshToken);
+
 //        return userAuthService.refresh(user.getUsername());
         return "refresh";
     }
