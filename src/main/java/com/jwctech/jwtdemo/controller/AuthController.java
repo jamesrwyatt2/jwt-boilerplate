@@ -62,7 +62,7 @@ public class AuthController {
         return userService.createUser(user);
     }
     /**
-     * Current Logout will invalidate the token at front end
+     * Current Logout will invalidate the token at backend end
      * */
     @PostMapping("/user/logout")
     public String logout(@RequestHeader(name="Authorization") String token) {
