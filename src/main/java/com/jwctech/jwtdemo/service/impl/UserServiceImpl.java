@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
 //        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setEnabled(true);
         User newUser = userRepository.save(user);
-        System.out.println(newUser);
+        System.out.println(newUser.toString());
 
         return "User Created";
     }
