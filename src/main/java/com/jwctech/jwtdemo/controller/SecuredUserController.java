@@ -1,6 +1,6 @@
 package com.jwctech.jwtdemo.controller;
 
-import com.jwctech.jwtdemo.Service.UserAuthenticationService;
+import com.jwctech.jwtdemo.service.UserAuthenticationService;
 import com.jwctech.jwtdemo.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,14 +26,8 @@ public class SecuredUserController {
                         .collect(Collectors.joining(" "));
     }
 
-    /**
-     * Extracts the user from the token
-     * @param token
-     * @return
-     */
     public User getUserFromToken(String token) {
         String[] tokenSplit = token.split(" ");
-        User user = userAuthService.findByToken(tokenSplit[1]);
-        return user;
+        return userAuthService.findByToken(tokenSplit[1]);
     }
 }

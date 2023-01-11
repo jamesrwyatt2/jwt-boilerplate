@@ -1,14 +1,10 @@
 package com.jwctech.jwtdemo.controller;
 
-import com.jwctech.jwtdemo.Service.UserAuthenticationService;
+import com.jwctech.jwtdemo.service.UserAuthenticationService;
 import com.jwctech.jwtdemo.entity.User;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.security.RolesAllowed;
 
 @RestController
 public class SecuredAdminController {
@@ -28,7 +24,6 @@ public class SecuredAdminController {
 
     public User getUserFromToken(String token) {
         String[] tokenSplit = token.split(" ");
-        User user = userAuthService.findByToken(tokenSplit[1]);
-        return user;
+        return userAuthService.findByToken(tokenSplit[1]);
     }
 }

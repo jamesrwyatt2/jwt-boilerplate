@@ -1,7 +1,7 @@
 package com.jwctech.jwtdemo.controller;
 
-import com.jwctech.jwtdemo.Service.UserAuthenticationService;
-import com.jwctech.jwtdemo.Service.UserService;
+import com.jwctech.jwtdemo.service.UserAuthenticationService;
+import com.jwctech.jwtdemo.service.UserService;
 import com.jwctech.jwtdemo.dto.AuthRequest;
 import com.jwctech.jwtdemo.entity.Role;
 import com.jwctech.jwtdemo.entity.User;
@@ -87,6 +87,7 @@ public class AuthController {
                 LOG.warn("Cookie: {}", cookie.getName());
                 if(cookie.getName().equals("RefreshToken")) {
                     LOG.warn("Cookie: " + cookie.getName() + " Value: " + cookie.getValue());
+                    return "Valid Cookie - Refresh Token.";
                 }
             }
         }
@@ -94,7 +95,7 @@ public class AuthController {
 //        System.out.println("Refresh token: " + refreshToken);
 
 //        return userAuthService.refresh(user.getUsername());
-        return "refresh";
+        return "Failed";
     }
 
 }
