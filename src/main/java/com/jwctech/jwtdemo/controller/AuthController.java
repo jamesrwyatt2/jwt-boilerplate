@@ -92,9 +92,6 @@ public class AuthController {
             }
         }
 
-//        System.out.println("Refresh token: " + refreshToken);
-
-//        return userAuthService.refresh(user.getUsername());
         return "Failed";
     }
 
