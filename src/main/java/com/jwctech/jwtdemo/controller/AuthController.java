@@ -1,10 +1,11 @@
 package com.jwctech.jwtdemo.controller;
 
+import com.jwctech.jwtdemo.models.ERole;
 import com.jwctech.jwtdemo.service.UserAuthenticationService;
 import com.jwctech.jwtdemo.service.UserService;
-import com.jwctech.jwtdemo.dto.AuthRequest;
-import com.jwctech.jwtdemo.entity.Role;
-import com.jwctech.jwtdemo.entity.User;
+import com.jwctech.jwtdemo.payload.request.AuthRequest;
+import com.jwctech.jwtdemo.models.Role;
+import com.jwctech.jwtdemo.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RestController
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
@@ -28,7 +30,7 @@ public class AuthController {
         this.userAuthService = userAuthService;
     }
 
-    @PostMapping("/user/token")
+    @PostMapping("/signin")
     public String token(@RequestBody AuthRequest request, HttpServletResponse response) {
 
         String token = userAuthService.login(request.username(), request.password());
@@ -46,25 +48,31 @@ public class AuthController {
         return token;
     }
 
-    @PostMapping("/user/register")
+    @PostMapping("/signup")
     public String newUser(@RequestBody User user) {
         Set<Role> addRoles = new HashSet<>();
-        addRoles.add(new Role("USER"));
+        Role role = new Role(ERole.ROLE_USER);
+        addRoles.add(role);
         user.setRoles(addRoles);
         return userService.createUser(user);
     }
-    @PostMapping("/user/register/admin")
+    @PostMapping("/signup/admin")
     public String newAdmin(@RequestBody User user) {
         Set<Role> addRoles = new HashSet<>();
-        addRoles.add(new Role("USER"));
-        addRoles.add(new Role("ADMIN"));
+        Role roleUser = new Role(ERole.ROLE_USER);
+        addRoles.add(roleUser);
+
+        Role roleAdmin = new Role(ERole.ROLE_ADMIN);
+        addRoles.add(roleAdmin);
+
+
         user.setRoles(addRoles);
         return userService.createUser(user);
     }
     /**
      * Current Logout will invalidate the token at backend end
      * */
-    @PostMapping("/user/logout")
+    @PostMapping("/signout")
     public String logout(@RequestHeader(name="Authorization") String token) {
         String[] tokenSplit = token.split(" ");
         userAuthService.logout(tokenSplit[1]);
@@ -72,7 +80,7 @@ public class AuthController {
     }
     /** Not in use
      * TODO: add proper logic to  refresh*/
-    @PostMapping("/user/refresh")
+    @PostMapping("/refreshToken")
     public String refresh(@RequestHeader(name="Authorization") String token,
 //                          @CookieValue(name="RefreshToken") String refreshToken,
                           HttpServletRequest request

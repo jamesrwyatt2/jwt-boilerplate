@@ -1,7 +1,7 @@
 package com.jwctech.jwtdemo.service.impl;
 
 import com.jwctech.jwtdemo.service.UserService;
-import com.jwctech.jwtdemo.entity.User;
+import com.jwctech.jwtdemo.models.User;
 import com.jwctech.jwtdemo.repository.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;

@@ -3,7 +3,7 @@ package com.jwctech.jwtdemo.service.impl;
 import com.jwctech.jwtdemo.util.TokenProviderUtil;
 import com.jwctech.jwtdemo.service.UserAuthenticationService;
 import com.jwctech.jwtdemo.service.UserService;
-import com.jwctech.jwtdemo.entity.User;
+import com.jwctech.jwtdemo.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -33,7 +33,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
             throw new BadCredentialsException("Invalid username or password");
         }
 
-        return tokenProviderUtil.generateToken(username, user.getRoles());
+        return tokenProviderUtil.generateToken(user);
     }
 
     @Override

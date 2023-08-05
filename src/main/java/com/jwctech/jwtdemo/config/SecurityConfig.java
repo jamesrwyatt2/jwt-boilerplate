@@ -1,6 +1,5 @@
 package com.jwctech.jwtdemo.config;
 
-import com.jwctech.jwtdemo.entity.Role;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -63,7 +62,7 @@ public class SecurityConfig {
                 .authorizeRequests(auth -> auth
                         //Allow all request for home page with permit ALl
                         .antMatchers("/").permitAll()
-                        .antMatchers("/user/**").permitAll()
+                        .antMatchers("/api/auth/**").permitAll()
                         .mvcMatchers("/secured/admin").hasAuthority("SCOPE_ADMIN")
                         //AnyRequest is a catch-all for any request that doesn't match the above
                         .anyRequest().authenticated()

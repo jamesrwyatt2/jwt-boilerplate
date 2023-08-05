@@ -1,4 +1,4 @@
-package com.jwctech.jwtdemo.entity;
+package com.jwctech.jwtdemo.models;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,9 +15,10 @@ public class User {
     private String username;
     private String password;
 
-    /* ToDo: add roles */
-
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinTable( name = "user_roles",
+                        joinColumns = @JoinColumn(name = "user_id"),
+                        inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
 
@@ -73,16 +74,16 @@ public class User {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
     @Override
-    public String toString(){
-
-        String roleString = this.roles.stream()
-                .map(n -> String.valueOf(n.getAuthority()))
-                .collect(Collectors.joining("-"));
-
-        return "username: " + this.username +
-                ", enabled: " + this.enabled +
-                ", roles: " + roleString;
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", enabled=" + enabled +
+                '}';
     }
 }
 

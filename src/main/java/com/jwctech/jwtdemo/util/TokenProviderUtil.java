@@ -1,11 +1,14 @@
 package com.jwctech.jwtdemo.util;
 
-import com.jwctech.jwtdemo.entity.InvalidToken;
-import com.jwctech.jwtdemo.entity.Role;
+import com.jwctech.jwtdemo.models.InvalidToken;
+import com.jwctech.jwtdemo.models.Role;
+import com.jwctech.jwtdemo.models.User;
 import com.jwctech.jwtdemo.repository.InvalidTokenRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -14,10 +17,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static java.lang.String.format;
 
 @Service
 public class TokenProviderUtil {
@@ -36,18 +39,18 @@ public class TokenProviderUtil {
             this.invalidTokenRepo = invalidTokenRepo;
         }
 
-        public String generateToken(String username, Set<Role> roles) {
+        public String generateToken(User user) {
             Instant now = Instant.now();
 
-            String scope = roles.stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.joining(" "));
+            String scope = "";
+
             JwtClaimsSet claims = JwtClaimsSet.builder()
                     .issuer("self")
                     .issuedAt(now)
                     .expiresAt(now.plus(1, ChronoUnit.HOURS))
-                    .subject(username)
-                    .claim("scope", scope)
+                    .subject(user.getUsername())
+                    .claim("scope", "ADMIN")
+                    .claim("role", "ADMIN")
                     .build();
             return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
         }

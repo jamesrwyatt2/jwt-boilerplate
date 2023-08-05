@@ -1,7 +1,7 @@
 package com.jwctech.jwtdemo.controller;
 
 import com.jwctech.jwtdemo.service.UserAuthenticationService;
-import com.jwctech.jwtdemo.entity.User;
+import com.jwctech.jwtdemo.models.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -21,9 +21,7 @@ public class SecuredUserController {
     @GetMapping("/secured/user")
     public String secured( @RequestHeader(name="Authorization") String token) {
         User user = getUserFromToken(token);
-        return "Welcome to the secured page, " + user.getUsername() + ", Roles: " +
-                user.getRoles().stream().map(GrantedAuthority::getAuthority)
-                        .collect(Collectors.joining(" "));
+        return "Welcome to the secured page, " + user.getUsername() + ", Roles: " + user.getRoles();
     }
 
     public User getUserFromToken(String token) {

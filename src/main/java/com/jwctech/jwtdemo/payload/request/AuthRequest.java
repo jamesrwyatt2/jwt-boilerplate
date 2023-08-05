@@ -1,6 +1,6 @@
-package com.jwctech.jwtdemo.dto;
+package com.jwctech.jwtdemo.payload.request;
 
-import com.jwctech.jwtdemo.entity.Role;
+import com.jwctech.jwtdemo.models.Role;
 
 public record AuthRequest(
         String username,

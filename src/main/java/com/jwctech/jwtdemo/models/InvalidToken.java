@@ -1,4 +1,4 @@
-package com.jwctech.jwtdemo.entity;
+package com.jwctech.jwtdemo.models;
 
 import javax.persistence.*;
 

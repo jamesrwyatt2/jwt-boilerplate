@@ -1,6 +1,6 @@
 package com.jwctech.jwtdemo.service;
 
-import com.jwctech.jwtdemo.entity.User;
+import com.jwctech.jwtdemo.models.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public interface UserService {
