@@ -1,6 +1,18 @@
 # Functional JWT API for User Login
 This is example JWT project with Spring Security. Handles Registration, Login, Logout, Refresh Token, expired JWT and Refresh Tokens
 
+1. Registration
+2. Login Verification, JWT and Refresh Token Generation
+3. Logout will Invalidate JWT preventing future login
+4. JWT expire after 20 minutes, One time use Refresh Token can be used upto 7 Days
+5. After 7 days both JWT and refresh token are invalid new login requred. 
+
+Additional Functionally 
+1. Role Based, Controller Class level, Authorization. Only Admin Role can access "/secured/admin" end-point
+
+
+***********
+
 based on YouTube Video Spring Boot Rest API Json Web Tokens: 
 https://www.youtube.com/watch?v=KYNR5js2cXE
 
