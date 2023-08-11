@@ -13,12 +13,10 @@ import java.io.IOException;
 
 public class JwtRevokedFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private TokenProviderUtil tokenProviderUtil;
-
     private static final Logger LOG = LoggerFactory.getLogger(JwtRevokedFilter.class);
 
-
+    @Autowired
+    private TokenProviderUtil tokenProviderUtil;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String headerToken =  request.getHeader("Authorization");
@@ -39,7 +37,7 @@ public class JwtRevokedFilter extends OncePerRequestFilter {
                 }
             }
 
-        }else {
+        } else {
             LOG.warn("Couldn't find bearer string, header will be ignored");
         }
 
