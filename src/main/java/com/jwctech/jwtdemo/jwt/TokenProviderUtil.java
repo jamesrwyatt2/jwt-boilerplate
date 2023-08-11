@@ -45,7 +45,7 @@ public class TokenProviderUtil {
             JwtClaimsSet claims = JwtClaimsSet.builder()
                     .issuer("self")
                     .issuedAt(now)
-                    .expiresAt(now.plus(1, ChronoUnit.HOURS))
+                    .expiresAt(now.plus(1200, ChronoUnit.SECONDS))
                     .subject(user.getUsername())
                     .claim("scope", scope)
                     .build();
