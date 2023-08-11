@@ -1,6 +1,5 @@
-package com.jwctech.jwtdemo.config;
+package com.jwctech.jwtdemo.jwt;
 
-import com.jwctech.jwtdemo.util.TokenProviderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,22 +22,18 @@ public class JwtRevokedFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String headerToken =  request.getHeader("Authorization");
-        System.out.println("Token From Header:" + headerToken);
-        String username = null;
-        String authToken = null;
-
+        LOG.debug("Token From Header:" + headerToken);
 
         // If auth empty end filter
         if(headerToken != null){
-
             String[] tokenSplit = headerToken.split(" ");
 
             if(tokenSplit[1] != null){
-                System.out.println("Split Token:" + tokenSplit[1]);
-                boolean found = tokenProviderUtil.validateToken(tokenSplit[1]);
-                System.out.println("is Invalid:" + found);
+                LOG.debug("Split Token:" + tokenSplit[1]);
+                boolean foundInvalid = tokenProviderUtil.validateToken(tokenSplit[1]);
+                LOG.debug("is Invalid:" + foundInvalid);
 
-                if(found){
+                if(foundInvalid){
                     LOG.error("InvalidToken");
                     throw new RuntimeException("Invalid Token!");
                 }

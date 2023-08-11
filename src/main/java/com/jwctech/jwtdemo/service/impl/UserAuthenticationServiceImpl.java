@@ -1,6 +1,6 @@
 package com.jwctech.jwtdemo.service.impl;
 
-import com.jwctech.jwtdemo.util.TokenProviderUtil;
+import com.jwctech.jwtdemo.jwt.TokenProviderUtil;
 import com.jwctech.jwtdemo.service.UserAuthenticationService;
 import com.jwctech.jwtdemo.service.UserService;
 import com.jwctech.jwtdemo.models.User;
@@ -33,7 +33,11 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
             throw new BadCredentialsException("Invalid username or password");
         }
 
-        return tokenProviderUtil.generateToken(user);
+        String token =  tokenProviderUtil.generateToken(user);
+
+        LOG.debug(token);
+
+        return token;
     }
 
     @Override

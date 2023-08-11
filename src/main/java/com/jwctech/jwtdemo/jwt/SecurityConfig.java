@@ -1,4 +1,4 @@
-package com.jwctech.jwtdemo.config;
+package com.jwctech.jwtdemo.jwt;
 
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -16,6 +16,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -56,8 +58,6 @@ public class SecurityConfig {
         return http
                 // Disable CSRF (cross site request forgery)
                 .csrf(csrf -> csrf.disable())
-                /** TODO: add Expired JWT filter */
-                //.addFilterBefore()
 
                 .authorizeRequests(auth -> auth
                         //Allow all request for home page with permit ALl
@@ -75,6 +75,11 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .addFilterBefore(JwtRevokedFilterBean(), UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean

@@ -1,4 +1,4 @@
-package com.jwctech.jwtdemo.config;
+package com.jwctech.jwtdemo.jwt;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

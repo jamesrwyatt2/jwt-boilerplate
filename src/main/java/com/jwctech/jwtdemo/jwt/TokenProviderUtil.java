@@ -1,14 +1,11 @@
-package com.jwctech.jwtdemo.util;
+package com.jwctech.jwtdemo.jwt;
 
 import com.jwctech.jwtdemo.models.InvalidToken;
-import com.jwctech.jwtdemo.models.Role;
 import com.jwctech.jwtdemo.models.User;
 import com.jwctech.jwtdemo.repository.InvalidTokenRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -18,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -42,25 +38,25 @@ public class TokenProviderUtil {
         public String generateToken(User user) {
             Instant now = Instant.now();
 
-            String scope = "";
+            String scope = user.getRoles().stream()
+                    .map(item -> item.getName().toString())
+                    .collect(Collectors.joining(" "));
 
             JwtClaimsSet claims = JwtClaimsSet.builder()
                     .issuer("self")
                     .issuedAt(now)
                     .expiresAt(now.plus(1, ChronoUnit.HOURS))
                     .subject(user.getUsername())
-                    .claim("scope", "ADMIN")
-                    .claim("role", "ADMIN")
+                    .claim("scope", scope)
                     .build();
             return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
         }
 
         public String parseToken(String token) {
             String clams = decoder.decode(token).getClaims().toString();
-            System.out.println("clams: " + clams);
-            String username = decoder.decode(token).getSubject();
+            LOG.info("clams: " + clams);
 
-            return username;
+            return decoder.decode(token).getSubject();
         }
 
 
