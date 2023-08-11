@@ -4,14 +4,17 @@ import com.jwctech.jwtdemo.security.exception.TokenRefreshException;
 import com.jwctech.jwtdemo.security.models.RefreshToken;
 import com.jwctech.jwtdemo.security.repository.RefreshTokenRepository;
 import com.jwctech.jwtdemo.security.repository.UserRepository;
+import com.jwctech.jwtdemo.security.service.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
-public class RefreshTokenServiceImpl {
+@Service
+public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Value("${jwc.app.jwtRefreshExpirationMs}")
     private Long refreshTokenDurationMs;
@@ -44,7 +47,7 @@ public class RefreshTokenServiceImpl {
     public RefreshToken verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);
-            throw new TokenRefreshException(token.getToken(), "Refresh token was expired. Please make a new signin request");
+            throw new TokenRefreshException(token.getToken(), "Refresh token was expired. Please make a new sign-in request");
         }
 
         return token;

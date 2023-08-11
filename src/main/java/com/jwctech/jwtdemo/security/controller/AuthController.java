@@ -1,6 +1,8 @@
 package com.jwctech.jwtdemo.security.controller;
 
 import com.jwctech.jwtdemo.security.models.ERole;
+import com.jwctech.jwtdemo.security.models.RefreshToken;
+import com.jwctech.jwtdemo.security.service.RefreshTokenService;
 import com.jwctech.jwtdemo.security.service.UserAuthenticationService;
 import com.jwctech.jwtdemo.security.service.UserService;
 import com.jwctech.jwtdemo.security.payload.request.AuthRequest;
@@ -8,12 +10,17 @@ import com.jwctech.jwtdemo.security.models.Role;
 import com.jwctech.jwtdemo.security.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -24,16 +31,27 @@ public class AuthController {
 
     public final UserService userService;
     public final UserAuthenticationService userAuthService;
+    public final RefreshTokenService refreshTokenService;
 
-    public AuthController(UserService userService, UserAuthenticationService userAuthService) {
+    public AuthController(UserService userService, UserAuthenticationService userAuthService, RefreshTokenService refreshTokenService) {
         this.userService = userService;
         this.userAuthService = userAuthService;
+        this.refreshTokenService = refreshTokenService;
     }
 
-    @PostMapping("/signin")
-    public String token(@RequestBody AuthRequest request, HttpServletResponse response) {
+    @PostMapping(value = "/signin", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity token(@RequestBody AuthRequest request, HttpServletResponse response) {
+
+        User user = userService.loadUserByUsername(request.username());
 
         String token = userAuthService.login(request.username(), request.password());
+
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
+
+        Map<String, String> body = new HashMap<>();
+
+        body.put("token",token);
+        body.put("refreshToken",refreshToken.getToken());
 
         Cookie cookie = new Cookie("RefreshToken", "test_refresh_token");
         cookie.setMaxAge(30 * 24 * 60 * 60);
@@ -42,10 +60,12 @@ public class AuthController {
 //        cookie.setSecure(true);
         cookie.setDomain("localhost");
         cookie.setPath("/user/refresh");
+//        response.addCookie(cookie);
 
-        response.addCookie(cookie);
-
-        return token;
+        return ResponseEntity.ok()
+//                .header(HttpHeaders.SET_COOKIE, token)
+//                .header(HttpHeaders.SET_COOKIE, refreshToken.toString())
+                .body(body);
     }
 
     @PostMapping("/signup")

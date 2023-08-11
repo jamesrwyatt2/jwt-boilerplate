@@ -14,6 +14,10 @@ Solution to Roles: https://dev.to/toojannarong/spring-security-with-jwt-the-easi
 
 Info on filtering: https://medium.com/@akhileshanand/spring-boot-api-security-with-jwt-and-role-based-authorization-fea1fd7c9e32
 
+Creating Refresh Token: https://www.bezkoder.com/spring-security-refresh-token/
+
+Controller Advice: https://www.bezkoder.com/spring-boot-restcontrolleradvice/
+
 ***************** OLD references ***********
 
 
