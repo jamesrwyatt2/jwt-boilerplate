@@ -2,12 +2,9 @@ package com.jwctech.jwtdemo.controller;
 
 import com.jwctech.jwtdemo.service.UserAuthenticationService;
 import com.jwctech.jwtdemo.models.User;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.stream.Collectors;
 
 @RestController
 public class SecuredUserController {

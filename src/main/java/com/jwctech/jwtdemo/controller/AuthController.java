@@ -51,7 +51,7 @@ public class AuthController {
     @PostMapping("/signup")
     public String newUser(@RequestBody User user) {
         Set<Role> addRoles = new HashSet<>();
-        Role role = new Role(ERole.ROLE_USER);
+        Role role = new Role(ERole.USER);
         addRoles.add(role);
         user.setRoles(addRoles);
         return userService.createUser(user);
@@ -59,12 +59,11 @@ public class AuthController {
     @PostMapping("/signup/admin")
     public String newAdmin(@RequestBody User user) {
         Set<Role> addRoles = new HashSet<>();
-        Role roleUser = new Role(ERole.ROLE_USER);
-        addRoles.add(roleUser);
 
-        Role roleAdmin = new Role(ERole.ROLE_ADMIN);
+        Role role = new Role(ERole.USER);
+        addRoles.add(role);
+        Role roleAdmin = new Role(ERole.ADMIN);
         addRoles.add(roleAdmin);
-
 
         user.setRoles(addRoles);
         return userService.createUser(user);
