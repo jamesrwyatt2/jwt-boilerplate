@@ -13,6 +13,8 @@ import java.util.Date;
 @RestControllerAdvice
 public class TokenControllerAdvice {
 
+/** Handles Expired Refresh Tokens
+ * */
     @ExceptionHandler(value = TokenRefreshException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorMessage handleTokenRefreshException(TokenRefreshException ex, WebRequest request) {

@@ -1,5 +1,5 @@
-# jwt-demo
-This is example JWT with Spring Security 
+# Functional JWT API for User Login
+This is example JWT project with Spring Security. Handles Registration, Login, Logout, Refresh Token, expired JWT and Refresh Tokens
 
 based on YouTube Video Spring Boot Rest API Json Web Tokens: 
 https://www.youtube.com/watch?v=KYNR5js2cXE
