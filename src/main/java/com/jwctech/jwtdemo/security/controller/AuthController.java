@@ -55,6 +55,8 @@ public class AuthController {
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
 
+        ResponseCookie jwtRefreshCookie = tokenProviderUtil.generateRefreshJwtCookie(refreshToken.getToken());
+
         Map<String, String> body = new HashMap<>();
 
         body.put("token",token);
@@ -63,6 +65,7 @@ public class AuthController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
                 .body(body);
     }
 
@@ -92,15 +95,21 @@ public class AuthController {
     @PostMapping("/signout")
     public ResponseEntity<?> logout(@RequestHeader(name="Authorization") String token, HttpServletRequest request) {
         String cookiesToken = tokenProviderUtil.getJwtFromCookies(request);
-        ResponseCookie cookie = tokenProviderUtil.getCleanJwtCookie();
-        userAuthService.logout(cookiesToken);
 
+        userAuthService.logout(cookiesToken);
+        User user = userAuthService.findByToken(cookiesToken);
+        refreshTokenService.deleteByUserId(user.getId());
+
+        ResponseCookie cookie = tokenProviderUtil.getCleanJwtCookie();
+        ResponseCookie refreshCookie = tokenProviderUtil.getCleanJwtRefreshCookie();
 
         // old logic
         String[] tokenSplit = token.split(" ");
         userAuthService.logout(tokenSplit[1]);
 
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                 .body("You've been signed out!");
     }
     /** Not in use

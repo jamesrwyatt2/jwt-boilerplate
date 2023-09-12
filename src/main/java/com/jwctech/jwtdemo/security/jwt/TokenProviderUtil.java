@@ -34,6 +34,9 @@ public class TokenProviderUtil {
     @Value("${jwc.app.jwtCookieName}")
     private String jwtCookie;
 
+    @Value("${jwc.app.jwtRefreshCookieName}")
+    private String jwtRefreshCookie;
+
     private final JwtEncoder encoder;
 
     private final JwtDecoder decoder;
@@ -61,6 +64,19 @@ public class TokenProviderUtil {
 
     public ResponseCookie getCleanJwtCookie() {
         return ResponseCookie.from(jwtCookie, null).path("/api").build();
+    }
+
+//    Refresh Token Cookie
+    public ResponseCookie generateRefreshJwtCookie(String refreshToken) {
+        return generateCookie(jwtRefreshCookie, refreshToken, "/api/auth/refreshtoken");
+    }
+
+    public String getJwtRefreshFromCookies(HttpServletRequest request) {
+        return getCookieValueByName(request, jwtRefreshCookie);
+    }
+    public ResponseCookie getCleanJwtRefreshCookie() {
+        ResponseCookie cookie = ResponseCookie.from(jwtRefreshCookie, null).path("/api/auth/refreshtoken").build();
+        return cookie;
     }
 
     public String generateToken(User user) {
@@ -105,6 +121,19 @@ public class TokenProviderUtil {
 
     public String refreshToken(String token) {
         return null;
+    }
+
+    private ResponseCookie generateCookie(String name, String value, String path) {
+        return ResponseCookie.from(name, value).path(path).maxAge(24 * 60 * 60).httpOnly(true).build();
+    }
+
+    private String getCookieValueByName(HttpServletRequest request, String name) {
+        Cookie cookie = WebUtils.getCookie(request, name);
+        if (cookie != null) {
+            return cookie.getValue();
+        } else {
+            return null;
+        }
     }
 
 }
