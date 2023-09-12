@@ -35,24 +35,23 @@ public class AuthController {
     public final UserService userService;
     public final UserAuthenticationService userAuthService;
     public final RefreshTokenService refreshTokenService;
+    public final TokenProviderUtil tokenProviderUtil;
 
-    @Autowired
-    TokenProviderUtil tokenProviderUtil;
-
-    public AuthController(UserService userService, UserAuthenticationService userAuthService, RefreshTokenService refreshTokenService) {
+    public AuthController(UserService userService, UserAuthenticationService userAuthService, TokenProviderUtil tokenProviderUtil, RefreshTokenService refreshTokenService) {
         this.userService = userService;
         this.userAuthService = userAuthService;
+        this.tokenProviderUtil = tokenProviderUtil;
         this.refreshTokenService = refreshTokenService;
     }
 
     @PostMapping(value = "/signin", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity token(@RequestBody AuthRequest request, HttpServletResponse response) {
+    public ResponseEntity token(@RequestBody AuthRequest request) {
 
         User user = userService.loadUserByUsername(request.username());
 
         String token = userAuthService.login(request.username(), request.password());
 
-        ResponseCookie jwtCookie = tokenProviderUtil.generateJwtCookie(request.username(), request.password());
+        ResponseCookie jwtCookie = tokenProviderUtil.generateJwtCookie(token);
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
 
@@ -60,6 +59,7 @@ public class AuthController {
 
         body.put("token",token);
         body.put("refreshToken",refreshToken.getToken());
+        body.put("userName", user.getUsername());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
@@ -90,10 +90,18 @@ public class AuthController {
      * Current Logout will invalidate the token at backend end
      * */
     @PostMapping("/signout")
-    public String logout(@RequestHeader(name="Authorization") String token) {
+    public ResponseEntity<?> logout(@RequestHeader(name="Authorization") String token, HttpServletRequest request) {
+        String cookiesToken = tokenProviderUtil.getJwtFromCookies(request);
+        ResponseCookie cookie = tokenProviderUtil.getCleanJwtCookie();
+        userAuthService.logout(cookiesToken);
+
+
+        // old logic
         String[] tokenSplit = token.split(" ");
         userAuthService.logout(tokenSplit[1]);
-        return "User logged out";
+
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body("You've been signed out!");
     }
     /** Not in use
      * TODO: add proper logic to  refresh*/

@@ -1,5 +1,7 @@
-package com.jwctech.jwtdemo.security.jwt;
+package com.jwctech.jwtdemo.security.config;
 
+import com.jwctech.jwtdemo.security.jwt.JwtRevokedFilter;
+import com.jwctech.jwtdemo.security.jwt.RsaKeyProps;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -39,18 +41,6 @@ public class SecurityConfig {
     public SecurityConfig(RsaKeyProps rsaKeys) {
         this.rsaKeys = rsaKeys;
     }
-
-
-//    In memory user details manager
-//    @Bean
-//    public InMemoryUserDetailsManager user() {
-//        return new InMemoryUserDetailsManager(
-//                User.withUsername("user")
-//                        .password("{noop}password")
-//                        .roles("USER")
-//                        .build()
-//        );
-//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

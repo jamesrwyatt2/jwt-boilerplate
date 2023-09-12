@@ -21,6 +21,8 @@ public class JwtRevokedFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String headerToken =  request.getHeader("Authorization");
         LOG.debug("Token From Header:" + headerToken);
+        String cookieToken = tokenProviderUtil.getJwtFromCookies(request);
+        LOG.warn("JWT cookie: " + cookieToken);
 
         // If auth empty end filter
         if(headerToken != null){

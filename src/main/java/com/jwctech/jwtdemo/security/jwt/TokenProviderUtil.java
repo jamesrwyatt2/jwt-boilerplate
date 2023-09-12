@@ -14,7 +14,10 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
@@ -35,21 +38,29 @@ public class TokenProviderUtil {
 
     private final JwtDecoder decoder;
 
-    private final UserAuthenticationService userAuthService;
-
     private final InvalidTokenRepository invalidTokenRepo;
 
-    public TokenProviderUtil(JwtEncoder encoder, JwtDecoder decoder, UserAuthenticationService userAuthService, InvalidTokenRepository invalidTokenRepo) {
+    public TokenProviderUtil(JwtEncoder encoder, JwtDecoder decoder, InvalidTokenRepository invalidTokenRepo) {
         this.encoder = encoder;
         this.decoder = decoder;
-        this.userAuthService = userAuthService;
         this.invalidTokenRepo = invalidTokenRepo;
     }
 
-    public ResponseCookie generateJwtCookie(String userName, String password) {
-        String token = userAuthService.login(userName, password);
-        ResponseCookie cookie = ResponseCookie.from(jwtCookie, token).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
-        return cookie;
+    public String getJwtFromCookies(HttpServletRequest request) {
+        Cookie cookie = WebUtils.getCookie(request, jwtCookie);
+        if (cookie != null) {
+            return cookie.getValue();
+        } else {
+            return null;
+        }
+    }
+
+    public ResponseCookie generateJwtCookie(String token) {
+        return ResponseCookie.from(jwtCookie, token).path("/").maxAge(24 * 60 * 60).httpOnly(true).build();
+    }
+
+    public ResponseCookie getCleanJwtCookie() {
+        return ResponseCookie.from(jwtCookie, null).path("/api").build();
     }
 
     public String generateToken(User user) {
