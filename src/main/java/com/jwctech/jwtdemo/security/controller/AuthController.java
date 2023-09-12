@@ -1,5 +1,6 @@
 package com.jwctech.jwtdemo.security.controller;
 
+import com.jwctech.jwtdemo.security.jwt.TokenProviderUtil;
 import com.jwctech.jwtdemo.security.models.ERole;
 import com.jwctech.jwtdemo.security.models.RefreshToken;
 import com.jwctech.jwtdemo.security.service.RefreshTokenService;
@@ -10,8 +11,10 @@ import com.jwctech.jwtdemo.security.models.Role;
 import com.jwctech.jwtdemo.security.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +36,9 @@ public class AuthController {
     public final UserAuthenticationService userAuthService;
     public final RefreshTokenService refreshTokenService;
 
+    @Autowired
+    TokenProviderUtil tokenProviderUtil;
+
     public AuthController(UserService userService, UserAuthenticationService userAuthService, RefreshTokenService refreshTokenService) {
         this.userService = userService;
         this.userAuthService = userAuthService;
@@ -46,6 +52,8 @@ public class AuthController {
 
         String token = userAuthService.login(request.username(), request.password());
 
+        ResponseCookie jwtCookie = tokenProviderUtil.generateJwtCookie(request.username(), request.password());
+
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
 
         Map<String, String> body = new HashMap<>();
@@ -53,18 +61,8 @@ public class AuthController {
         body.put("token",token);
         body.put("refreshToken",refreshToken.getToken());
 
-        Cookie cookie = new Cookie("RefreshToken", "test_refresh_token");
-        cookie.setMaxAge(30 * 24 * 60 * 60);
-        // Uncomment the following line to set the cookie to be used only in HTTPS
-//        cookie.setHttpOnly(true);
-//        cookie.setSecure(true);
-        cookie.setDomain("localhost");
-        cookie.setPath("/user/refresh");
-//        response.addCookie(cookie);
-
         return ResponseEntity.ok()
-//                .header(HttpHeaders.SET_COOKIE, token)
-//                .header(HttpHeaders.SET_COOKIE, refreshToken.toString())
+                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(body);
     }
 

@@ -1,5 +1,5 @@
 # Functional JWT API for User Login
-This is example JWT project with Spring Security. Handles Registration, Login, Logout, Refresh Token, expired JWT and Refresh Tokens
+This is an example JWT project with Spring Security. Handles Registration, Login, Logout, Refresh Token, expired JWT and expired Refresh Tokens
 
 1. Registration
 2. Login Verification, JWT and Refresh Token Generation
