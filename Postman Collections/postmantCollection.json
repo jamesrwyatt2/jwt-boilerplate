@@ -1,0 +1,281 @@
+{
+	"info": {
+		"_postman_id": "f52b126d-7d90-49af-bbf9-3e03d52806ab",
+		"name": "JWT-Boilerplate",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8061c830-a910-448b-9b50-58bd2afc848d",
+						"exec": [
+							"// The test scripts below run after the api /login returns the response\r",
+							"\r",
+							"const authCookie = pm.response.headers.idx(3).value\r",
+							"/* \r",
+							"pm.response.headers.idx(3) is equal to:\r",
+							"{key: \"Set-Cookie\", value: \"xs=eyJhb; Max-Age=3600; Path=/; Expires=Fri, 18 Dec 2020 04:40:34 GMT; HttpOnly; Secure; SameSite=None\"} \r",
+							"*/\r",
+							"console.log(authCookie)\r",
+							"const token = authCookie.substring(13, authCookie.indexOf(';'))\r",
+							"console.log(token)\r",
+							"\r",
+							"pm.collectionVariables.set('RefreshToken_value', token);\r",
+							"\r",
+							"pm.test(\"Setting Cookie\", function () {\r",
+							"// The test scripts below run after the api /login returns the response\r",
+							"\r",
+							"const authCookie = pm.response.headers.idx(1).value\r",
+							"/* \r",
+							"pm.response.headers.idx(3) is equal to:\r",
+							"{key: \"Set-Cookie\", value: \"xs=eyJhb; Max-Age=3600; Path=/; Expires=Fri, 18 Dec 2020 04:40:34 GMT; HttpOnly; Secure; SameSite=None\"} \r",
+							"*/\r",
+							"console.log(authCookie)\r",
+							"const token = authCookie.substring(13, authCookie.indexOf(';'))\r",
+							"console.log(token)\r",
+							"\r",
+							"pm.collectionVariables.set('RefreshToken_value', token);\r",
+							"\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "ac3b6c78-fd83-4d0b-893e-21f94f79df6f",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"jim30\",\r\n    \"password\":\"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"token"
+					],
+					"query": [
+						{
+							"key": "c",
+							"value": null,
+							"type": "text",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign-Up",
+			"_postman_id": "d3026f5f-d549-4824-8237-d0250d03c9ae",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"jim2\",\r\n    \"password\":\"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/auth/signup"
+			},
+			"response": []
+		},
+		{
+			"name": "Sign-Up Admin",
+			"_postman_id": "19888dbe-9b43-44b9-bd9c-44147ac3f3a7",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"jim35\",\r\n    \"password\":\"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/auth/signup/admin"
+			},
+			"response": []
+		},
+		{
+			"name": "Sign-In",
+			"_postman_id": "0f5cd6d6-4aa9-4ce9-9513-c255db7ae2b7",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"jim35\",\r\n    \"password\":\"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/auth/signin"
+			},
+			"response": []
+		},
+		{
+			"name": "Sign-Out",
+			"_postman_id": "3ff864d2-a7b3-4dd5-a274-6508d6396921",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiamltMzUiLCJleHAiOjE2OTE3MjY1NjAsImlhdCI6MTY5MTcyNTM2MCwic2NvcGUiOiJVU0VSIEFETUlOIn0.VnyyiJLOPb7bjQCTQFTL4_RFke5XlfIRyVmLjFwL5f4uFF-jd6tRxhH9a2Bp30WvjCFSPnyT0CxCzlhu3NmhtVztn9v0l3oFpKPmqs7pVKRW5zfGz0IaOOBQBEMJoRbvkUiAEL5rWZCSslZLwMM6jV15gEtPmSZ1Pm8DH_-vvfEF1BsLTabNdLDkPgDWcDPI1xPR_gBv579GS7jlY0UCVArewfS0dGowViRK16FjZS1WL8x-S8AnSUMVPxG5ZnL4jeciSzSTbny5zfP3BJQNGoxJ-Av_3nmADhhVPtEA7uR6NOnrOWu8pspzlj-rcuJngjLAxIy7hvCVsp_tFx3PSg"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"jim\",\r\n    \"password\":\"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/auth/signout"
+			},
+			"response": []
+		},
+		{
+			"name": "RefreshToken",
+			"_postman_id": "4da810d0-941b-4647-a37c-cb32497cb8e6",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiamltMzUiLCJleHAiOjE2OTE3MjY1NjAsImlhdCI6MTY5MTcyNTM2MCwic2NvcGUiOiJVU0VSIEFETUlOIn0.VnyyiJLOPb7bjQCTQFTL4_RFke5XlfIRyVmLjFwL5f4uFF-jd6tRxhH9a2Bp30WvjCFSPnyT0CxCzlhu3NmhtVztn9v0l3oFpKPmqs7pVKRW5zfGz0IaOOBQBEMJoRbvkUiAEL5rWZCSslZLwMM6jV15gEtPmSZ1Pm8DH_-vvfEF1BsLTabNdLDkPgDWcDPI1xPR_gBv579GS7jlY0UCVArewfS0dGowViRK16FjZS1WL8x-S8AnSUMVPxG5ZnL4jeciSzSTbny5zfP3BJQNGoxJ-Av_3nmADhhVPtEA7uR6NOnrOWu8pspzlj-rcuJngjLAxIy7hvCVsp_tFx3PSg"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"jim\",\r\n    \"password\":\"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/auth/signout"
+			},
+			"response": []
+		},
+		{
+			"name": "Secured User Test",
+			"_postman_id": "24d64c60-339c-4703-bf2a-881acc21db27",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiamltMzUiLCJleHAiOjE2OTE3MjU1OTgsImlhdCI6MTY5MTcyMTk5OCwic2NvcGUiOiJVU0VSIEFETUlOIn0.Xp1cPAzDQOnllCJTpJ21dKA21AXkTrn6uXgOMK06SlbMTPcdfopKXNUmjiyxb7ntrYygJe9TJnpmT_BEQS6JdcQymqCVe9e9nENrS7cet-J3xBZydM91Q2FB3X_fECNcKVURL9BNUiGnMIdNV-Czn9u5zKSlaJDOt3qX0kX1A_Ycmg7iB02xwxGdwV4HdBSowV8QDLwrYSczJTlkwY8FZcleey_ZCJhJ7ItMSvT6ycS9HYl_Jdygkeqs9veFqQ1BWuQIO4RaDoTVbdVyqxFCj9f0DPkDC2hkW4VfGGQ2lSOGDS3r09q27xNjt7IwFp2RSlrf_9hBbIrAaftbbEpW0w"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"jim\",\r\n    \"password\":\"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/secured/user"
+			},
+			"response": []
+		},
+		{
+			"name": "Secured Admin Test",
+			"_postman_id": "3e6e8460-8cd5-4d3b-914a-5bca553252ac",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiamltMzUiLCJleHAiOjE2OTE3MjY1NjAsImlhdCI6MTY5MTcyNTM2MCwic2NvcGUiOiJVU0VSIEFETUlOIn0.VnyyiJLOPb7bjQCTQFTL4_RFke5XlfIRyVmLjFwL5f4uFF-jd6tRxhH9a2Bp30WvjCFSPnyT0CxCzlhu3NmhtVztn9v0l3oFpKPmqs7pVKRW5zfGz0IaOOBQBEMJoRbvkUiAEL5rWZCSslZLwMM6jV15gEtPmSZ1Pm8DH_-vvfEF1BsLTabNdLDkPgDWcDPI1xPR_gBv579GS7jlY0UCVArewfS0dGowViRK16FjZS1WL8x-S8AnSUMVPxG5ZnL4jeciSzSTbny5zfP3BJQNGoxJ-Av_3nmADhhVPtEA7uR6NOnrOWu8pspzlj-rcuJngjLAxIy7hvCVsp_tFx3PSg"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/secured/admin"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "787de510-95a7-46cf-b879-2958189b03fe",
+			"key": "xs_value",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "12fd9132-6290-4dd4-a24c-0daf1522462b",
+			"key": "RefreshToken_value",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
