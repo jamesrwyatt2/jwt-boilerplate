@@ -12,6 +12,10 @@ This is an example JWT project with Spring Security. Handles Registration, Login
 Additional Functionally 
 1. Role Based, Controller Class level, Authorization. Only Admin Role can access "/secured/admin" end-point
 
+Steps to Implement
+1. Create public and private key
+2. place them under resources/certs
+3. Ready to go!
 
 ***********
 
