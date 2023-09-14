@@ -264,16 +264,26 @@
 			"response": []
 		}
 	],
-	"variable": [
+	"event": [
 		{
-			"id": "9e096b19-f7f7-4cb2-9989-f95168eb5c62",
-			"key": "xs_value",
-			"value": ""
+			"listen": "prerequest",
+			"script": {
+				"id": "87ddd4c1-b42b-4e7d-953a-fd65ba1838be",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		},
 		{
-			"id": "199ba73e-2f4f-49f0-ae66-b06f463a1568",
-			"key": "RefreshToken_value",
-			"value": ""
+			"listen": "test",
+			"script": {
+				"id": "ecdff5c2-8e75-41d7-97ce-b65a69908ecd",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
