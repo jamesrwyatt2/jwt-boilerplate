@@ -7,7 +7,7 @@ This is an example JWT project with Spring Security. Handles Registration, Login
 2. Login Verification, JWT and Refresh Token Generation
 3. Logout will Invalidate JWT preventing future login
 4. JWT expire after 20 minutes, One time use Refresh Token can be used upto 7 Days
-5. After 7 days both JWT and refresh token are invalid new login requred. 
+5. After 7 days both JWT and refresh token are invalid new login required. 
 
 Additional Functionally 
 1. Role Based, Controller Class level, Authorization. Only Admin Role can access "/secured/admin" end-point
@@ -38,17 +38,13 @@ Controller Advice: https://www.bezkoder.com/spring-boot-restcontrolleradvice/
 
 ***************** OLD references ***********
 
-
 Additional JWT Role Resources:
 https://medium.com/@akhileshanand/spring-boot-api-security-with-jwt-and-role-based-authorization-fea1fd7c9e32
 Roles:https://stackoverflow.com/questions/58205510/spring-security-mapping-oauth2-claims-with-roles-to-secure-resource-server-endp
 
-
 ***********
 
-
 additional Resource for Custom Database User Validation
-
 
 * Openssl is needed, can use from Git Bash install *
 
