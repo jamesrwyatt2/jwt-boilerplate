@@ -11,7 +11,6 @@ import com.jwctech.jwtdemo.security.models.Role;
 import com.jwctech.jwtdemo.security.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,12 +29,12 @@ import java.util.Set;
 public class AuthController {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
-
     public final UserService userService;
     public final UserAuthenticationService userAuthService;
     public final RefreshTokenService refreshTokenService;
     public final TokenProviderUtil tokenProviderUtil;
 
+    // Constructor
     public AuthController(UserService userService, UserAuthenticationService userAuthService, TokenProviderUtil tokenProviderUtil, RefreshTokenService refreshTokenService) {
         this.userService = userService;
         this.userAuthService = userAuthService;
@@ -44,21 +42,30 @@ public class AuthController {
         this.refreshTokenService = refreshTokenService;
     }
 
+    /**
+     * signIn handles login for current users
+     * @param authRequest is user credentials to login
+     * @return Cookie for JWT, Cookie for Refresh Token, and body with User details
+     */
+
     @PostMapping(value = "/signin", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity token(@RequestBody AuthRequest request) {
+    public ResponseEntity signIn(@RequestBody AuthRequest authRequest) {
 
-        User user = userService.loadUserByUsername(request.username());
+        // validate User Credentials
+        String token = userAuthService.login(authRequest.username(), authRequest.password());
 
-        String token = userAuthService.login(request.username(), request.password());
+        // Get User details
+        User user = userService.loadUserByUsername(authRequest.username());
 
+        // Create JWT and Cookie
         ResponseCookie jwtCookie = tokenProviderUtil.generateJwtCookie(token);
 
+        //Get refresh toke and create a cookie for it
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
-
         ResponseCookie jwtRefreshCookie = tokenProviderUtil.generateRefreshJwtCookie(refreshToken.getToken());
 
+        // Build a JSON body for response
         Map<String, String> body = new HashMap<>();
-
         body.put("token",token);
         body.put("refreshToken",refreshToken.getToken());
         body.put("userName", user.getUsername());
@@ -69,6 +76,11 @@ public class AuthController {
                 .body(body);
     }
 
+    /**
+     * Submitted User info to create a regular User
+     * @param user
+     * @return
+     */
     @PostMapping("/signup")
     public String newUser(@RequestBody User user) {
         Set<Role> addRoles = new HashSet<>();
@@ -77,6 +89,12 @@ public class AuthController {
         user.setRoles(addRoles);
         return userService.createUser(user);
     }
+
+    /**
+     * Submitted User info to create an Admin User
+     * @param user
+     * @return
+     */
     @PostMapping("/signup/admin")
     public String newAdmin(@RequestBody User user) {
         Set<Role> addRoles = new HashSet<>();
@@ -90,22 +108,23 @@ public class AuthController {
         return userService.createUser(user);
     }
     /**
-     * Current Logout will invalidate the token at backend end
+     * Logout will add JWT to invalid list and delete Refresh tokens
      * */
     @PostMapping("/signout")
     public ResponseEntity<?> logout(@RequestHeader(name="Authorization") String token, HttpServletRequest request) {
+        // Gather JWT and User
         String cookiesToken = tokenProviderUtil.getJwtFromCookies(request);
-
-        userAuthService.logout(cookiesToken);
         User user = userAuthService.findByToken(cookiesToken);
+
+        // Adds JWT to invalid list
+        userAuthService.logout(cookiesToken);
+        // Delete Refresh tokens for the user
         refreshTokenService.deleteByUserId(user.getId());
 
+        // Clears the cookies for the user
         ResponseCookie cookie = tokenProviderUtil.getCleanJwtCookie();
         ResponseCookie refreshCookie = tokenProviderUtil.getCleanJwtRefreshCookie();
 
-        // old logic
-        String[] tokenSplit = token.split(" ");
-        userAuthService.logout(tokenSplit[1]);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
@@ -113,7 +132,8 @@ public class AuthController {
                 .body("You've been signed out!");
     }
     /** Not in use
-     * TODO: add proper logic to  refresh*/
+     * TODO: add proper logic to  refresh, logic prepared, need to implement
+     * */
     @PostMapping("/refreshToken")
     public String refresh(@RequestHeader(name="Authorization") String token,
 //                          @CookieValue(name="RefreshToken") String refreshToken,
