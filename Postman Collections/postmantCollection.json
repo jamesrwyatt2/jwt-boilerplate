@@ -242,7 +242,7 @@
 				"auth": {
 					"type": "bearer",
 					"bearer": {
-						"token": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiamltMzUiLCJleHAiOjE2OTQ3NDU4MTksImlhdCI6MTY5NDc0NTc1OSwic2NvcGUiOiJVU0VSIEFETUlOIn0.sbv8lkb6ZWskKSKN1VBU_4oNkt5sKjdP1tFjPLwVI9usZQhcwmaWe44bVaAnNNBccqUoTY2hBx_IESCPnBG8dotpESSrEqJcnfM24pqlbmorTLqYDGwPTkX3wYhpxO0hKk_V8FJB4D0PagCdEWvn0LoV_TruxkksO5FnytPTEmzsPmHTL-Z543Aq2nurkdJXnJR_wcfEYnsdcDoY3cJwxyUtVDqwSaRFGMpEsjru5j7-DXaoYau5fxE5OD4KjBLCQRYmGxZyClcSkkKL4khHJPhAW-mJ9ECZty73N-WfQoap3Pn3TVyQsD-MId6pVFDqFD9NeE1qarurgftSAVSBpg"
+						"token": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiamltMzUiLCJleHAiOjE2OTQ4MDE0NTUsImlhdCI6MTY5NDgwMTM5NSwic2NvcGUiOiJVU0VSIEFETUlOIn0.cQAYRC1U6ARY6sM8TzWyTg3CPcZ6nB95YMu1kTC3vYuwT7AnkEc9CVllJROe61MqHPsJMuN5XM0996owCiDFj75ywVpto6EUYiM0Q2bZqz3i7pO9--YwidapTjCkIh_lVlfcTtASPJnOL3W6I_2tF-XIM8WDfLFmm_MQTxFCvkyE2-JcsBVmudugwJoNNL7lY_S9DhzSiIUFQgPiuoaaqvzHXQEFHN9TN_0Ak9-s58L9C-sA8lbNPDGWcCaVz8Ju4BbSiMtY7cCqVX1Og_lpuwpktTjcaVdCX_a_g0_A66aNNBWkWtyhZ8WIw7GWZGwC_hzwT_UVMllgDueRXiAMmQ"
 					}
 				},
 				"method": "GET",
