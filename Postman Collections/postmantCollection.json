@@ -187,10 +187,7 @@
 			},
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": {
-						"token": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiamltMzUiLCJleHAiOjE2OTE3MjY1NjAsImlhdCI6MTY5MTcyNTM2MCwic2NvcGUiOiJVU0VSIEFETUlOIn0.VnyyiJLOPb7bjQCTQFTL4_RFke5XlfIRyVmLjFwL5f4uFF-jd6tRxhH9a2Bp30WvjCFSPnyT0CxCzlhu3NmhtVztn9v0l3oFpKPmqs7pVKRW5zfGz0IaOOBQBEMJoRbvkUiAEL5rWZCSslZLwMM6jV15gEtPmSZ1Pm8DH_-vvfEF1BsLTabNdLDkPgDWcDPI1xPR_gBv579GS7jlY0UCVArewfS0dGowViRK16FjZS1WL8x-S8AnSUMVPxG5ZnL4jeciSzSTbny5zfP3BJQNGoxJ-Av_3nmADhhVPtEA7uR6NOnrOWu8pspzlj-rcuJngjLAxIy7hvCVsp_tFx3PSg"
-					}
+					"type": "noauth"
 				},
 				"method": "POST",
 				"header": [],
