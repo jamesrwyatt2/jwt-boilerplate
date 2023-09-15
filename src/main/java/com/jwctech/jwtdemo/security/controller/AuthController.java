@@ -150,10 +150,17 @@ public class AuthController {
                         String token = tokenProviderUtil.generateToken(user);
                         ResponseCookie jwtCookie = tokenProviderUtil.generateJwtCookie(token);
 
+                        // Create body for response
+                        Map<String, String> body = new HashMap<>();
+                        body.put("token",token);
+                        body.put("userName", user.getUsername());
+                        body.put("message", "Token is refreshed successfully!");
+
                         //return new JWT Cookie for user
                         return ResponseEntity.ok()
                                 .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                                .body(new MessageResponse("Token is refreshed successfully!"));
+                                .body(body);
+
                     })
                     // If above fails throw error
                     .orElseThrow(() -> new TokenRefreshException(refreshToken,

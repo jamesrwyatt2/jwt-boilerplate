@@ -2,6 +2,7 @@ package com.jwctech.jwtdemo.security.config;
 
 import com.jwctech.jwtdemo.security.jwt.authenticationJwtTokenFilter;
 import com.jwctech.jwtdemo.security.jwt.RsaKeyProps;
+import com.jwctech.jwtdemo.security.service.RefreshTokenService;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -10,6 +11,7 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +20,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -65,12 +68,14 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 // Custom JWT validation
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())
-                        .authenticationEntryPoint((request, response, exception) -> {
-                            validateToken(request);
-                        })
+//                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())
+//                        .authenticationEntryPoint((request, response, exception) -> {
+//                            validateToken(request);
+//                        })
+//                )
+                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
 
-                )
+
                 //Set the session management to stateless
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -109,21 +114,22 @@ public class SecurityConfig {
      *
      * @param request
      */
-    public void validateToken(HttpServletRequest request){
-        LOG.info("Custom JWT validation");
-        // Check if there are Cookies
-        if(request.getCookies() != null && request.getCookies().length > 0) {
-            // Filter cookies, find token
-            String token = Arrays.stream(request.getCookies())
-                    .filter(cookie -> cookie.getName().equals(jwtCookie))
-                    .findFirst().get().getValue();
-            //Validate token
-            jwtDecoder().decode(token);
-        } else {
-            // If no cookie are present, throw unauthorized error
-            LOG.warn("Throw Error!!!");
-        }
-
-    }
+//    public void validateToken(HttpServletRequest request){
+//        LOG.info("Custom JWT validation");
+//        // Check if there are Cookies
+//        if(request.getCookies() != null && request.getCookies().length > 0) {
+//            LOG.info("Cookies not empty");
+//            // Filter cookies, find token
+//            String token = Arrays.stream(request.getCookies())
+//                    .filter(cookie -> cookie.getName().equals(jwtCookie))
+//                    .findFirst().get().getValue();
+//            //Validate token
+//            LOG.info("Token: "+ token);
+//            jwtDecoder().decode(token);
+//        } else {
+//            // If no cookie are present, throw unauthorized error
+//            LOG.warn("Throw Error!!!");
+//        }
+//    }
 
 }
