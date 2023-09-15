@@ -214,14 +214,14 @@
 				"auth": {
 					"type": "bearer",
 					"bearer": {
-						"token": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiamltMzUiLCJleHAiOjE2OTQ3NDYyMjEsImlhdCI6MTY5NDc0NjE2MSwic2NvcGUiOiJBRE1JTiBVU0VSIn0.NKYVBJK4LDymmaGstYm-d1jBtFEB_YPFYVw3-hucEEaqGTJj33_c7w05yPw2g4VN4pKAqzjLqIMZG5_17VyVzJ5fPFPDbav1_m7K6PVA1k0H6kn5MqoU5hOm4de-CLBd_I6KrAbrG9SEYanvxDuvzhqjDeWoIBMiw0zn6PibHcQsBmlQ4xIgp17G83plMcN4mNNRcRViXZ1zh3BdXS4ktCJb3_Ff1eP-tMteqCeTNGaHRry4ntKke3Tv_WW62zrg84q6gTf5ICrkGM_jcFB9WJZEuaeOTfgzH-tDAJYoBah7I9cnIZd0Tc9YK7aEBH13b5HPoR9xODQ7J56Dx5eC8Q"
+						"token": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiamltMzUiLCJleHAiOjE2OTQ4MDE0NTUsImlhdCI6MTY5NDgwMTM5NSwic2NvcGUiOiJVU0VSIEFETUlOIn0.cQAYRC1U6ARY6sM8TzWyTg3CPcZ6nB95YMu1kTC3vYuwT7AnkEc9CVllJROe61MqHPsJMuN5XM0996owCiDFj75ywVpto6EUYiM0Q2bZqz3i7pO9--YwidapTjCkIh_lVlfcTtASPJnOL3W6I_2tF-XIM8WDfLFmm_MQTxFCvkyE2-JcsBVmudugwJoNNL7lY_S9DhzSiIUFQgPiuoaaqvzHXQEFHN9TN_0Ak9-s58L9C-sA8lbNPDGWcCaVz8Ju4BbSiMtY7cCqVX1Og_lpuwpktTjcaVdCX_a_g0_A66aNNBWkWtyhZ8WIw7GWZGwC_hzwT_UVMllgDueRXiAMmQ"
 					}
 				},
 				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\":\"jim\",\r\n    \"password\":\"password\"\r\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
