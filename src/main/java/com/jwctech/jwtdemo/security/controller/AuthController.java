@@ -1,8 +1,10 @@
 package com.jwctech.jwtdemo.security.controller;
 
+import com.jwctech.jwtdemo.security.exception.TokenRefreshException;
 import com.jwctech.jwtdemo.security.jwt.TokenProviderUtil;
 import com.jwctech.jwtdemo.security.models.ERole;
 import com.jwctech.jwtdemo.security.models.RefreshToken;
+import com.jwctech.jwtdemo.security.payload.response.MessageResponse;
 import com.jwctech.jwtdemo.security.service.RefreshTokenService;
 import com.jwctech.jwtdemo.security.service.UserAuthenticationService;
 import com.jwctech.jwtdemo.security.service.UserService;
@@ -17,7 +19,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -135,26 +136,27 @@ public class AuthController {
      * TODO: add proper logic to  refresh, logic prepared, need to implement
      * */
     @PostMapping("/refreshToken")
-    public String refresh(@RequestHeader(name="Authorization") String token,
-//                          @CookieValue(name="RefreshToken") String refreshToken,
-                          HttpServletRequest request
-                            ) {
+    public ResponseEntity<?> refresh(HttpServletRequest request) {
 
-        Cookie[] cookies = request.getCookies();
+        String refreshToken = tokenProviderUtil.getJwtRefreshFromCookies(request);
 
-//        LOG.warn("Cookies: {}", cookies);
+        if((refreshToken != null) && (refreshToken.length() > 0)){
+            return refreshTokenService.findByToken(refreshToken)
+                    .map(refreshTokenService::verifyExpiration)
+                    .map(RefreshToken::getUser)
+                    .map(user -> {
+                        String token = tokenProviderUtil.generateToken(user);
+                        ResponseCookie jwtCookie = tokenProviderUtil.generateJwtCookie(token);
 
-        if(cookies != null) {
-            for(Cookie cookie : cookies) {
-                LOG.warn("Cookie: {}", cookie.getName());
-                if(cookie.getName().equals("RefreshToken")) {
-                    LOG.warn("Cookie: " + cookie.getName() + " Value: " + cookie.getValue());
-                    return "Valid Cookie - Refresh Token.";
-                }
-            }
+                        return ResponseEntity.ok()
+                                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                                .body(new MessageResponse("Token is refreshed successfully!"));
+                    })
+                    .orElseThrow(() -> new TokenRefreshException(refreshToken,
+                            "Refresh token is not in database!"));
         }
 
-        return "Failed";
+        return ResponseEntity.badRequest().body(new MessageResponse("Refresh Token is empty!"));
     }
 
 }
