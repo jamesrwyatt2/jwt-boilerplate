@@ -133,9 +133,9 @@ public class AuthController {
                 .body("You've been signed out!");
     }
     /** Refresh Token logic
-     * TODO: Needs testing
+     *
      * */
-    @PostMapping("/refreshToken")
+    @PostMapping("/refreshtoken")
     public ResponseEntity<?> refresh(HttpServletRequest request) {
 
         String refreshToken = tokenProviderUtil.getJwtRefreshFromCookies(request);

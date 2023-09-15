@@ -29,10 +29,4 @@ public interface UserAuthenticationService {
      */
     void logout(String token);
 
-    /**
-     * Refreshes the given input {@code token}.
-     *
-     * @param token the token to refresh
-     */
-    String refresh(String token);
 }

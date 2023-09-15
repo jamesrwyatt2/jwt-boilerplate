@@ -43,7 +43,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
     @Override
     public User findByToken(String token) {
 
-        String username = tokenProviderUtil.parseToken(token);
+        String username = tokenProviderUtil.getUserNameFromJwtToken(token);
         User user = userService.loadUserByUsername(username);
         if (user == null) {
             LOG.error("Invalid username or password");
@@ -57,10 +57,6 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
         tokenProviderUtil.revokeToken(token);
     }
 
-    /** TODO: add refresh token logic*/
-    @Override
-    public String refresh(String username) {
-        return tokenProviderUtil.refreshToken(username);
-    }
+
 }
 

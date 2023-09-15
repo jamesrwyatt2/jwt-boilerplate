@@ -4,8 +4,10 @@ import com.jwctech.jwtdemo.security.models.User;
 import com.jwctech.jwtdemo.security.service.UserAuthenticationService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequestMapping("/api")
 @RestController
 public class SecuredUserController {
 

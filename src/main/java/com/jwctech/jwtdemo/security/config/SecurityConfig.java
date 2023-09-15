@@ -1,6 +1,6 @@
 package com.jwctech.jwtdemo.security.config;
 
-import com.jwctech.jwtdemo.security.jwt.JwtRevokedFilter;
+import com.jwctech.jwtdemo.security.jwt.authenticationJwtTokenFilter;
 import com.jwctech.jwtdemo.security.jwt.RsaKeyProps;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -51,19 +51,20 @@ public class SecurityConfig {
 
                 .authorizeRequests(auth -> auth
                         //Allow all request for home page with permit ALl
-                        .antMatchers("/").permitAll()
-                        .antMatchers("/api/auth/**").permitAll()
+                        .requestMatchers().permitAll()
+                        .mvcMatchers("/api/auth/**").permitAll()
                         .mvcMatchers("/secured/admin").hasAuthority("SCOPE_ADMIN")
                         //AnyRequest is a catch-all for any request that doesn't match the above
                         .anyRequest().authenticated()
                 )
+                // Will be using custom JWT validation logic
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 //Set the session management to stateless
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .httpBasic().disable()
-                .addFilterBefore(JwtRevokedFilterBean(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -79,17 +80,17 @@ public class SecurityConfig {
 
     @Bean
     JwtEncoder jwtEncoder() {
-        JWK jwk = new RSAKey.Builder(rsaKeys
-                .publicKey())
+        JWK jwk = new RSAKey.Builder(rsaKeys.publicKey())
                 .privateKey(rsaKeys.privateKey())
+
                 .build();
         JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
     }
 
     @Bean
-    public JwtRevokedFilter JwtRevokedFilterBean()  throws Exception {
-        return new JwtRevokedFilter();
+    public authenticationJwtTokenFilter authenticationJwtTokenFilter()  throws Exception {
+        return new authenticationJwtTokenFilter();
     }
 
 }
