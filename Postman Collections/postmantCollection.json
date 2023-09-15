@@ -200,7 +200,7 @@
 						}
 					}
 				},
-				"url": "http://localhost:8080/api/auth/refresh"
+				"url": "http://localhost:8080/api/auth/refreshToken"
 			},
 			"response": []
 		},
