@@ -132,15 +132,17 @@ public class AuthController {
                 .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                 .body("You've been signed out!");
     }
-    /** Not in use
-     * TODO: add proper logic to  refresh, logic prepared, need to implement
+    /** Refresh Token logic
+     * TODO: Needs testing
      * */
     @PostMapping("/refreshToken")
     public ResponseEntity<?> refresh(HttpServletRequest request) {
 
         String refreshToken = tokenProviderUtil.getJwtRefreshFromCookies(request);
 
+        //Check if refreshToken is empty
         if((refreshToken != null) && (refreshToken.length() > 0)){
+            //Find token, check if expired, get refresh token user, create JWT and Cookie
             return refreshTokenService.findByToken(refreshToken)
                     .map(refreshTokenService::verifyExpiration)
                     .map(RefreshToken::getUser)
@@ -148,14 +150,16 @@ public class AuthController {
                         String token = tokenProviderUtil.generateToken(user);
                         ResponseCookie jwtCookie = tokenProviderUtil.generateJwtCookie(token);
 
+                        //return new JWT Cookie for user
                         return ResponseEntity.ok()
                                 .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                                 .body(new MessageResponse("Token is refreshed successfully!"));
                     })
+                    // If above fails throw error
                     .orElseThrow(() -> new TokenRefreshException(refreshToken,
                             "Refresh token is not in database!"));
         }
-
+        // Returned for empty cookie
         return ResponseEntity.badRequest().body(new MessageResponse("Refresh Token is empty!"));
     }
 
