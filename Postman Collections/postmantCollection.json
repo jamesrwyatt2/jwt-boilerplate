@@ -203,7 +203,7 @@
 						}
 					}
 				},
-				"url": "http://localhost:8080/api/auth/signout"
+				"url": "http://localhost:8080/api/auth/refresh"
 			},
 			"response": []
 		},
